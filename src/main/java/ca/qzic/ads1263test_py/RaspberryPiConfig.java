@@ -31,9 +31,7 @@ public class RaspberryPiConfig extends Config {
             .setFrequency(2_000_000)
             .setClockMode(DEFAULT_SPI_CLOCK_MODE)
             .build();
-
-//        SpiDevice spi = (SpiDevice) DeviceFactoryHelper.getNativeDeviceFactory().
-//            .createSpiDevice("ADS1263",0, 0, 2_000_000, SpiClockMode.MODE_1, false);
+        
         return 0;
     }
 

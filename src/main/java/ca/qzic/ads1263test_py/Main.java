@@ -6,6 +6,7 @@ import static ca.qzic.ads1263test_py.network.Common.AppCommon.*;
 import java.util.prefs.*;
 import javax.swing.*;
 import java.awt.*;
+import static java.lang.System.out;
 import org.slf4j.*;
 
 /*
@@ -108,17 +109,21 @@ public class Main extends javax.swing.JFrame {
         int val = adc.getChannel(0);
         System.out.println("ADC1 Channel 0: " + val);
 
-        DiozeroHardwareInterface hw = new DiozeroHardwareInterface();
+//        DiozeroHardwareInterface hw = new DiozeroHardwareInterface();
+        RaspberryPiConfig hw = new RaspberryPiConfig();
         if (hw.moduleInit() == 0) {
             hw.digitalWrite(17, true);     // Example GPIO pin
             boolean state = hw.digitalRead(27);
             hw.spiWriteBytes(new byte[]{0x01, 0x02});
             byte[] response = hw.spiReadBytes(4);
             hw.delayMs(100);
+            for(int i=0; i< 4; i++) {
+                out.println(response[i]);
+            }
             hw.moduleExit();
         }
 
-        adc.exit();
+//        adc.exit();
         //==========================================================
 
         /*

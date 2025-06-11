@@ -9,10 +9,10 @@ package ca.qzic.ads1263test_py;
  * @author Quentin
  */
 
-import com.diozero.api.DigitalInputDevice;
-import com.diozero.api.DigitalOutputDevice;
-import com.diozero.api.SpiDevice;
-import com.diozero.util.SleepUtil;
+//import com.diozero.api.DigitalInputDevice;
+//import com.diozero.api.DigitalOutputDevice;
+//import com.diozero.api.SpiDevice;
+//import com.diozero.util.SleepUtil;
 import static java.lang.System.out;
 
 public abstract class Config {
@@ -38,7 +38,6 @@ public abstract class Config {
         }
 
         if (hostname.equals("RPi-3-1")) {
-            out.println("RPi config");
             implementation = new RaspberryPiConfig();
         }
     }
