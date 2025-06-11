@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+    <action>
+        <actionName>CUSTOM-Remote run</actionName>
+        <displayName>Remote run</displayName>
+        <goals>
+            <goal>install</goal>
+            <goal>antrun:run@exec</goal>
+        </goals>
+    </action>
+    <action>
+        <actionName>CUSTOM-Remote debug</actionName>
+        <displayName>Remote debug</displayName>
+        <goals>
+            <goal>install</goal>
+            <goal>antrun:run@debug</goal>
+        </goals>
+    </action>
+    <action>
+        <actionName>build</actionName>
+        <packagings>
+            <packaging>*</packaging>
+        </packagings>
+        <goals>
+            <goal>install</goal>
+        </goals>
+        <properties>
+            <skipTests>true</skipTests>
+        </properties>
+    </action>
+    <action>
+        <actionName>debug</actionName>
+        <packagings>
+            <packaging>jar</packaging>
+        </packagings>
+        <goals>
+            <goal>install</goal>
+            <goal>antrun:run@debug</goal>
+        </goals>
+        <properties>
+            <jpda.listen>true</jpda.listen>
+            <jpda.address>192.168.1.168:8000</jpda.address>
+        </properties>
+    </action>
+    <action>
+        <actionName>run</actionName>
+        <packagings>
+            <packaging>jar</packaging>
+        </packagings>
+        <goals>
+            <goal>install</goal>
+            <goal>antrun:run@exec</goal>
+        </goals>
+    </action>
+</actions>
