@@ -62,7 +62,7 @@ public class ADS1263 {
     private static final byte CMD_START2 = 0x0C, CMD_RDATA1 = 0x12, CMD_RDATA2 = 0x14;
     private static final byte CMD_RREG = 0x20, CMD_WREG = 0x40;
 
-    private int ScanMode = 1;
+    private int ScanMode = 0;
 
     public ADS1263() { /* default constructor */ }
 
@@ -143,7 +143,7 @@ public class ADS1263 {
     public void initADC1(Drate rate) {
         if (Config.implementation.moduleInit() != 0) throw new IllegalStateException("module_init failed");
         reset();
-        if (readChipID() != 1) throw new IllegalStateException("ID Read failed");
+//        if (readChipID() != 1) throw new IllegalStateException("ID Read failed");
         writeCmd(CMD_STOP1);
         configADC(Gain.GAIN1, rate);
         writeCmd(CMD_START1);
@@ -166,13 +166,13 @@ public class ADS1263 {
     }
 
     public int getChannel(int ch) {
-        if (ScanMode == 0) {
+//        if (ScanMode == 0) {
             // single-ended; channels 0–10
             writeReg(REG_INPMUX, (byte)((ch << 4) | 0x0a));
-        } else {
-            // differential; 0–4
-            writeReg(REG_INPMUX, (byte)(((ch * 2) << 4) | ((ch * 2) + 1)));
-        }
+//        } else {
+//            // differential; 0–4
+//            writeReg(REG_INPMUX, (byte)(((ch * 2) << 4) | ((ch * 2) + 1)));
+//        }
         waitDRDY();
         return readADC1Data();
     }

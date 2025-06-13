@@ -10,11 +10,11 @@ package ca.qzic.ads1263test_py;
  */
 import com.diozero.api.*;
 import static com.diozero.api.SpiConstants.DEFAULT_SPI_CLOCK_MODE;
-import com.diozero.sbc.*;
 import com.diozero.util.SleepUtil;
+import static java.lang.System.out;
+import java.util.*;
 
 public class RaspberryPiConfig extends Config {
-
     private DigitalOutputDevice rstPin;
     private DigitalOutputDevice csPin;
     private DigitalInputDevice drdyPin;
@@ -27,11 +27,10 @@ public class RaspberryPiConfig extends Config {
         drdyPin = new DigitalInputDevice(DRDY_PIN);
 
         spi = SpiDevice.builder(0)
-            .setChipSelect(0)
+            .setChipSelect(CS_PIN)
             .setFrequency(2_000_000)
             .setClockMode(DEFAULT_SPI_CLOCK_MODE)
             .build();
-        
         return 0;
     }
 

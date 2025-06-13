@@ -104,26 +104,22 @@ public class Main extends javax.swing.JFrame {
         myMsgHandler = new AppMsgHandler(uuidString);
 
         //==========================================================
-        ADS1263 adc = new ADS1263();
-        adc.initADC1(Drate.SPS14400);
-        int val = adc.getChannel(0);
-        System.out.println("ADC1 Channel 0: " + val);
-
-//        DiozeroHardwareInterface hw = new DiozeroHardwareInterface();
         RaspberryPiConfig hw = new RaspberryPiConfig();
-        if (hw.moduleInit() == 0) {
-            hw.digitalWrite(17, true);     // Example GPIO pin
-            boolean state = hw.digitalRead(27);
-            hw.spiWriteBytes(new byte[]{0x01, 0x02});
-            byte[] response = hw.spiReadBytes(4);
-            hw.delayMs(100);
-            for(int i=0; i< 4; i++) {
-                out.println(response[i]);
-            }
-            hw.moduleExit();
-        }
+//                DiozeroHardwareInterface hw1 = new DiozeroHardwareInterface();
+        ADS1263 adc = new ADS1263();
+               
+        out.println("Init");
+        adc.initADC1(Drate.SPS14400);
 
-//        adc.exit();
+
+
+
+        out.println("read");
+
+        int val = adc.getChannel(0);
+        out.println("ADC1 Channel 0: " + val);
+
+         adc.exit();
         //==========================================================
 
         /*

@@ -3,16 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package ca.qzic.ads1263test_py;
-
 /**
  *
  * @author Quentin
  */
-
-//import com.diozero.api.DigitalInputDevice;
-//import com.diozero.api.DigitalOutputDevice;
-//import com.diozero.api.SpiDevice;
-//import com.diozero.util.SleepUtil;
 import static java.lang.System.out;
 
 public abstract class Config {
