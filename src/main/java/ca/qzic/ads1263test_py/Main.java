@@ -4,8 +4,6 @@ import ca.qzic.ads1263test_py.ADS1263.Drate;
 import ca.qzic.ads1263test_py.network.Networks.AppMsgHandler;
 import static ca.qzic.ads1263test_py.network.Common.AppCommon.*;
 import java.util.prefs.*;
-import javax.swing.*;
-import java.awt.*;
 import static java.lang.System.out;
 import org.slf4j.*;
 
@@ -104,8 +102,7 @@ public class Main extends javax.swing.JFrame {
         myMsgHandler = new AppMsgHandler(uuidString);
 
         //==========================================================
-        RaspberryPiConfig hw = new RaspberryPiConfig();
-//                DiozeroHardwareInterface hw1 = new DiozeroHardwareInterface();
+        
         ADS1263 adc = new ADS1263();
                
         out.println("Init");

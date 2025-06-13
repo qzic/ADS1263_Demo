@@ -63,8 +63,11 @@ public class ADS1263 {
     private static final byte CMD_RREG = 0x20, CMD_WREG = 0x40;
 
     private int ScanMode = 0;
+    private RaspberryPiConfig hw;
 
-    public ADS1263() { /* default constructor */ }
+    public ADS1263() { 
+        hw = new RaspberryPiConfig();
+    }
 
     /** Resets via RST pin toggles */
     public void reset() {
@@ -166,13 +169,14 @@ public class ADS1263 {
     }
 
     public int getChannel(int ch) {
-//        if (ScanMode == 0) {
+        ScanMode = 0; // KLUDGE because somehow this gets set to 1 ????
+        if (ScanMode == 0) {
             // single-ended; channels 0–10
             writeReg(REG_INPMUX, (byte)((ch << 4) | 0x0a));
-//        } else {
-//            // differential; 0–4
-//            writeReg(REG_INPMUX, (byte)(((ch * 2) << 4) | ((ch * 2) + 1)));
-//        }
+        } else {
+            // differential; 0–4
+            writeReg(REG_INPMUX, (byte)(((ch * 2) << 4) | ((ch * 2) + 1)));
+        }
         waitDRDY();
         return readADC1Data();
     }
