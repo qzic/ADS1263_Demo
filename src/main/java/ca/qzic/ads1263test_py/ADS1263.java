@@ -63,10 +63,9 @@ public class ADS1263 {
     private static final byte CMD_RREG = 0x20, CMD_WREG = 0x40;
 
     private int ScanMode = 0;
-    private RaspberryPiConfig hw;
 
     public ADS1263() { 
-        hw = new RaspberryPiConfig();
+//        hw = new RaspberryPiConfig();
     }
 
     /** Resets via RST pin toggles */

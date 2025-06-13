@@ -26,6 +26,7 @@ public class Main extends javax.swing.JFrame {
     public static Main netHost;
     static AppMsgHandler myMsgHandler;
 
+        
     /**
      * Creates new form AppFrame
      */
@@ -104,12 +105,9 @@ public class Main extends javax.swing.JFrame {
         //==========================================================
         
         ADS1263 adc = new ADS1263();
-               
+//        RaspberryPiConfig hw = new RaspberryPiConfig();
         out.println("Init");
         adc.initADC1(Drate.SPS14400);
-
-
-
 
         out.println("read");
 
