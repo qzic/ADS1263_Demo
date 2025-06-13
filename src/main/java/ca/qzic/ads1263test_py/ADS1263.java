@@ -65,7 +65,6 @@ public class ADS1263 {
     private int ScanMode = 0;
 
     public ADS1263() { 
-//        hw = new RaspberryPiConfig();
     }
 
     /** Resets via RST pin toggles */
@@ -145,7 +144,7 @@ public class ADS1263 {
     public void initADC1(Drate rate) {
         if (Config.implementation.moduleInit() != 0) throw new IllegalStateException("module_init failed");
         reset();
-//        if (readChipID() != 1) throw new IllegalStateException("ID Read failed");
+        if (readChipID() != 1) throw new IllegalStateException("ID Read failed");
         writeCmd(CMD_STOP1);
         configADC(Gain.GAIN1, rate);
         writeCmd(CMD_START1);

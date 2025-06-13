@@ -105,7 +105,6 @@ public class Main extends javax.swing.JFrame {
         //==========================================================
         
         ADS1263 adc = new ADS1263();
-//        RaspberryPiConfig hw = new RaspberryPiConfig();
         out.println("Init");
         adc.initADC1(Drate.SPS14400);
 
