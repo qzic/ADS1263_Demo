@@ -14,19 +14,25 @@ import com.diozero.util.SleepUtil;
 import static java.lang.System.out;
 import java.util.*;
 
-public class RaspberryPiConfig extends Config {
-    private DigitalOutputDevice rstPin;
+public class RaspberryPiConfig {
+    public static final int RST_PIN = 18;
+    public static final int CS_PIN = 22;
+    public static final int DRDY_PIN = 17;
+    public static final int CONTROLLER = 0;
+    public static final int PORT_NUMBER = 0;
+    static public DigitalOutputDevice rstPin;
     private DigitalOutputDevice csPin;
     private DigitalInputDevice drdyPin;
     private SpiDeviceInterface spi;
 
-    @Override
+
     public int moduleInit() {
+        
         rstPin = new DigitalOutputDevice(RST_PIN, true, false);
         csPin = new DigitalOutputDevice(CS_PIN, true, false);
         drdyPin = new DigitalInputDevice(DRDY_PIN);
-
-        spi = SpiDevice.builder(0)
+        
+        spi = SpiDevice.builder(CONTROLLER)
             .setChipSelect(PORT_NUMBER)
             .setFrequency(2_000_000)
             .setClockMode(SpiClockMode.MODE_0)
@@ -34,7 +40,7 @@ public class RaspberryPiConfig extends Config {
         return 0;
     }
 
-    @Override
+
     public void moduleExit() {
         if (spi != null) spi.close();
         if (rstPin != null) rstPin.setValue(false);
@@ -44,29 +50,29 @@ public class RaspberryPiConfig extends Config {
         if (drdyPin != null) drdyPin.close();
     }
 
-    @Override
+
     public void digitalWrite(int pin, boolean value) {
         if (pin == RST_PIN) rstPin.setValue(value);
         else if (pin == CS_PIN) csPin.setValue(value);
     }
 
-    @Override
+
     public boolean digitalRead(int pin) {
         if (pin == DRDY_PIN) return drdyPin.getValue();
         return false;
     }
 
-    @Override
+
     public void delayMs(int delaytime) {
         SleepUtil.sleepMillis(delaytime);
     }
 
-    @Override
+
     public void spiWriteBytes(byte[] data) {
         spi.write(data);
     }
 
-    @Override
+
     public byte[] spiReadBytes(int length) {
         byte[] dummy = new byte[length];
         return spi.writeAndRead(dummy);

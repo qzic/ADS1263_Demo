@@ -1,5 +1,6 @@
 package ca.qzic.ads1263test_py;
 
+import static ca.qzic.ads1263test_py.ADS1263.ADS1263_reset;
 import ca.qzic.ads1263test_py.ADS1263.Drate;
 import ca.qzic.ads1263test_py.network.Networks.AppMsgHandler;
 import static ca.qzic.ads1263test_py.network.Common.AppCommon.*;
@@ -18,15 +19,14 @@ import org.slf4j.*;
  * @author Quentin
  */
 public class Main extends javax.swing.JFrame {
-
     private static final long serialVersionUID = 1L;
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(Main.class);
     public static volatile boolean die = false, stop = false;
     public static Preferences prefs;
     public static Main netHost;
     static AppMsgHandler myMsgHandler;
+    static double REF = 5.08;
 
-        
     /**
      * Creates new form AppFrame
      */
@@ -92,7 +92,7 @@ public class Main extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        prefs = Preferences.userNodeForPackage(Main.class);
+//        prefs = Preferences.userNodeForPackage(Main.class);
 
         logger.info("********************************************************");
         logger.info("**************** RPi Net Host 1.0 **********************");
@@ -100,33 +100,40 @@ public class Main extends javax.swing.JFrame {
 
         //------------------------------------------------------------------------------------------
         // Start Blue Tooth Server and message handler
-        myMsgHandler = new AppMsgHandler(uuidString);
+//        myMsgHandler = new AppMsgHandler(uuidString);
 
         //==========================================================
-        
         ADS1263 adc = new ADS1263();
         out.println("Init");
         adc.initADC1(Drate.SPS14400);
-//        adc.reset();
+        adc.setMode((byte) 0);
+
+//        out.println("adcData1 = " + adc.readADC1Data());
+        for (int i = 0; i < 10; i++) {
+            long val = adc.getChannel(i);
+            
+            if((val>>31) == 1)
+                    out.printf("IN%d is -%lf   raw = %d\r\n", i , REF*2 - val/2147483648.0 * REF,val); 
+                else
+                    out.printf("IN%d is %f    raw = %d\r\n", i, val/2147483647.0 * REF,val);   
+
+        }
+
+        adc.exit();
         
-        out.println("adcData1 = " + adc.readADC1Data());
-
-        int val = adc.getChannel(0);
-        out.println("ADC1 Channel 0: " + val);
-
-         adc.exit();
+        return;
         //==========================================================
 
         /*
          * Create and display the form
          */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                netHost = new Main();
-                netHost.setLocationByPlatform(true);
-                netHost.setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                netHost = new Main();
+//                netHost.setLocationByPlatform(true);
+//                netHost.setVisible(true);
+//            }
+//        });
     }
 
     public void MessageRecived(String s) {
