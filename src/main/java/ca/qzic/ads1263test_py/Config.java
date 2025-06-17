@@ -13,6 +13,7 @@ public abstract class Config {
     public static final int RST_PIN = 18;
     public static final int CS_PIN = 22;
     public static final int DRDY_PIN = 17;
+    public static final int PORT_NUMBER = 0;
 
     public abstract void digitalWrite(int pin, boolean value);
     public abstract boolean digitalRead(int pin);

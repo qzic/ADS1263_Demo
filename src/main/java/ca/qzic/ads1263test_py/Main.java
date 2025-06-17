@@ -107,8 +107,9 @@ public class Main extends javax.swing.JFrame {
         ADS1263 adc = new ADS1263();
         out.println("Init");
         adc.initADC1(Drate.SPS14400);
-
-        out.println("read");
+//        adc.reset();
+        
+        out.println("adcData1 = " + adc.readADC1Data());
 
         int val = adc.getChannel(0);
         out.println("ADC1 Channel 0: " + val);

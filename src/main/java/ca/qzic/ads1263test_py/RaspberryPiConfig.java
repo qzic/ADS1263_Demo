@@ -27,9 +27,9 @@ public class RaspberryPiConfig extends Config {
         drdyPin = new DigitalInputDevice(DRDY_PIN);
 
         spi = SpiDevice.builder(0)
-            .setChipSelect(CS_PIN)
+            .setChipSelect(PORT_NUMBER)
             .setFrequency(2_000_000)
-            .setClockMode(DEFAULT_SPI_CLOCK_MODE)
+            .setClockMode(SpiClockMode.MODE_0)
             .build();
         return 0;
     }

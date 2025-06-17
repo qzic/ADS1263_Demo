@@ -111,7 +111,7 @@ public class ADS1263 {
         long count = 0;
         while (Config.implementation.digitalRead(DRDY) != false) {
             if (++count > 400_000) {
-                System.err.println("Time Out ...");
+                System.err.println("waitDRDY(): Time Out ...");
                 break;
             }
         }
@@ -144,7 +144,7 @@ public class ADS1263 {
     public void initADC1(Drate rate) {
         if (Config.implementation.moduleInit() != 0) throw new IllegalStateException("module_init failed");
         reset();
-        if (readChipID() != 1) throw new IllegalStateException("ID Read failed");
+//        if (readChipID() != 1) throw new IllegalStateException("ID Read failed");
         writeCmd(CMD_STOP1);
         configADC(Gain.GAIN1, rate);
         writeCmd(CMD_START1);
