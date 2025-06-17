@@ -69,7 +69,6 @@ public class ADS1263 {
         }
     }
 
-
     // Register addresses
     private static final int REG_ID = 0, REG_MODE0 = 3, REG_MODE1 = 4, REG_MODE2 = 5;
     private static final int REG_INPMUX = 6, REG_REFMUX = 15, REG_ADC2CFG = 21;
@@ -80,7 +79,7 @@ public class ADS1263 {
     private static final byte CMD_RREG = 0x20, CMD_WREG = 0x40;
 
     private int ScanMode = 0;
-    
+
     public static RaspberryPiConfig rpi = new RaspberryPiConfig();
 
     public ADS1263() {
@@ -100,23 +99,23 @@ public class ADS1263 {
     }
 
     public void writeCmd(byte cmd) {
-        rpi.digitalWrite(CS_PIN, false);
+        csPin.off();
         rpi.spiWriteBytes(new byte[]{cmd});
-        rpi.digitalWrite(CS_PIN, true);
+        csPin.on();
     }
 
     public void writeReg(int reg, byte data) {
-        rpi.digitalWrite(CS_PIN, false);
+        csPin.off();
         rpi.spiWriteBytes(new byte[]{(byte) (CMD_WREG | reg), 0x00, data});
-        rpi.digitalWrite(CS_PIN, true);
+        csPin.on();
     }
 
     public byte readReg(int reg) {
-        rpi.digitalWrite(CS_PIN, false);
+        csPin.off();
         rpi.spiWriteBytes(new byte[]{(byte) (CMD_RREG | reg), 0x00});
         rpi.delayMs(2);
         byte[] resp = rpi.spiReadBytes(1);
-        rpi.digitalWrite(CS_PIN, true);
+        csPin.on();
         return resp[0];
     }
 
@@ -147,6 +146,7 @@ public class ADS1263 {
     }
 
     public void configADC1(Gain gain, Drate drate, Delay delay) {
+        csPin.off();
         byte mode2 = (byte) ((gain.ordinal() << 4) | drate.ordinal());
         writeReg(REG_MODE2, mode2);
         rpi.delayMs(1);
@@ -166,11 +166,12 @@ public class ADS1263 {
         writeReg(REG_MODE1, mode1);
         rpi.delayMs(1);
         assert readReg(REG_MODE1) == mode1;
+        csPin.on();
     }
 
     public void initADC1(Drate rate) {
+        ADS1263_reset();
         rpi.moduleInit();
-//        ADS1263_reset();
 //        rpi.delayMs(100);
 //        int chipID = readChipID();
 //        if (readChipID() != 1) throw new IllegalStateException("ID Read failed, ID = " + chipID);
@@ -183,19 +184,19 @@ public class ADS1263 {
         final int TIMEOUT = 40;
         int timeout = 0;
         byte[] status;
-        rpi.digitalWrite(CS_PIN, false);
+        csPin.off();
         rpi.delayMs(10);
-        do {
-            writeCmd(CMD_RDATA1);
-            rpi.delayMs(10);
-            status = rpi.spiReadBytes(1);
-        } while((status[0] & 0x40) == 0 && timeout++ < TIMEOUT);
-        
-        if(timeout >= TIMEOUT) {
-            out.println("readADC1Data; timed out");
-        }
+//        do {
+//            writeCmd(CMD_RDATA1);
+//            rpi.delayMs(10);
+//            status = rpi.spiReadBytes(1);
+//        } while((status[0] & 0x40) == 0 && timeout++ < TIMEOUT);
+//        
+//        if(timeout >= TIMEOUT) {
+//            out.println("readADC1Data; timed out");
+//        }
         byte[] buf = rpi.spiReadBytes(5);  // 4 data bytes plus crc
-        rpi.digitalWrite(CS_PIN, true);
+        csPin.on();
         long raw = ((buf[0] & 0xff) << 24) | ((buf[1] & 0xff) << 16)
             | ((buf[2] & 0xff) << 8) | (buf[3] & 0xff);
         if (checksum(raw, buf[4]) != 0)

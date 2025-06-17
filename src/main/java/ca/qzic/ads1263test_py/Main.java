@@ -94,9 +94,9 @@ public class Main extends javax.swing.JFrame {
     public static void main(String args[]) {
 //        prefs = Preferences.userNodeForPackage(Main.class);
 
-        logger.info("********************************************************");
-        logger.info("**************** RPi Net Host 1.0 **********************");
-        logger.info("********************************************************");
+        logger.info("****************************************************");
+        logger.info("**************** ADS1263 Test **********************");
+        logger.info("****************************************************");
 
         //------------------------------------------------------------------------------------------
         // Start Blue Tooth Server and message handler
@@ -116,9 +116,7 @@ public class Main extends javax.swing.JFrame {
                     out.printf("IN%d is -%lf   raw = %d\r\n", i , REF*2 - val/2147483648.0 * REF,val); 
                 else
                     out.printf("IN%d is %f    raw = %d\r\n", i, val/2147483647.0 * REF,val);   
-
         }
-
         adc.exit();
         
         return;
