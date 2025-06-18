@@ -54,6 +54,8 @@ public class RaspberryPiConfig {
     }
 
     public void spiWriteBytes(byte[] data) {
+//        if (data.length > 1) out.printf("byte[0] = 0x%x, byte[1] = 0x%x\n", data[0],data[1]);
+//        else out.printf("byte[0] = 0x%x\n", data[0]);
         spi.write(data);
     }
 

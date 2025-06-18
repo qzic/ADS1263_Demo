@@ -20,6 +20,17 @@ public class ADS1263_Constants {
         ADS1263_GAIN_64,
     }
 
+    enum ADS1263_ADC2_GAIN {
+        ADS1263_ADC2_GAIN_1,
+        ADS1263_ADC2_GAIN_2,
+        ADS1263_ADC2_GAIN_4,
+        ADS1263_ADC2_GAIN_8,
+        ADS1263_ADC2_GAIN_16,
+        ADS1263_ADC2_GAIN_32,
+        ADS1263_ADC2_GAIN_64,
+        ADS1263_ADC2_GAIN_128,
+    };
+    
     enum ADS1263_DRATE {
         ADS1263_2d5SPS,
         ADS1263_5SPS,
@@ -61,16 +72,6 @@ public class ADS1263_Constants {
         ADS1263_DELAY_8d8ms,
     };
 
-    enum ADS1263_ADC2_GAIN {
-        ADS1263_ADC2_GAIN_1,
-        ADS1263_ADC2_GAIN_2,
-        ADS1263_ADC2_GAIN_4,
-        ADS1263_ADC2_GAIN_8,
-        ADS1263_ADC2_GAIN_16,
-        ADS1263_ADC2_GAIN_32,
-        ADS1263_ADC2_GAIN_64,
-        ADS1263_ADC2_GAIN_128,
-    };
 
     enum ADS1263_DAC_VOLT {
         ADS1263_DAC_VLOT_4_5(0b01001),

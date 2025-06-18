@@ -1,12 +1,12 @@
 package ca.qzic.ads1263test_py;
 
-import static ca.qzic.ads1263test_py.ADS1263.ADS1263_reset;
 import ca.qzic.ads1263test_py.ADS1263_Constants.*;
 import ca.qzic.ads1263test_py.network.Networks.AppMsgHandler;
 import static ca.qzic.ads1263test_py.network.Common.AppCommon.*;
 import java.util.prefs.*;
 import static java.lang.System.out;
 import org.slf4j.*;
+import static ca.qzic.ads1263test_py.ADS1263.reset;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt
@@ -104,18 +104,16 @@ public class Main extends javax.swing.JFrame {
 
         //==========================================================
         ADS1263 adc = new ADS1263();
-        out.println("Init");
         adc.initADC1(ADS1263_DRATE.ADS1263_400SPS);
         adc.setMode((byte) 0);  // 0 = single ended measurement, 1 = differential
 
 //        out.println("adcData1 = " + adc.readADC1Data());
         for (int i = 0; i < 10; i++) {
             long val = adc.getChannel(i);
-            out.printf("i = %d\n",i);
             if((val>>31) == 1)
-                    out.printf("IN%d is -%lf   raw = %d\r\n", i , REF*2 - val/2147483648.0 * REF,val); 
+                    out.printf("IN %d is -%lf   raw = %d\r\n", i , REF*2 - val/2147483648.0 * REF,val); 
                 else
-                    out.printf("IN%d is %f    raw = %d\r\n", i, val/2147483647.0 * REF,val);   
+                    out.printf("IN %d is %f    raw = %d\r\n", i, val/2147483647.0 * REF,val);   
         }
         adc.exit();
         

@@ -15,14 +15,14 @@ public class ADS1263 {
     public static RaspberryPiConfig rpi = new RaspberryPiConfig();
 
     public ADS1263() {
-        ADS1263_reset();
-        setMode(1);
+        reset();
+        setMode(0);
     }
 
     /**
      * Resets via RST pin toggles
      */
-    static public void ADS1263_reset() {
+    static public void reset() {
         rstPin.on();
         rpi.delayMs(300);
         rstPin.off();
@@ -34,23 +34,21 @@ public class ADS1263 {
     public void writeCmd(ADS1263_CMD cmd) {
         csPin.off();
         rpi.delayMs(1);
-        rpi.spiWriteBytes(new byte[]{(byte) cmd.ordinal()});
+        rpi.spiWriteBytes(new byte[]{(byte) cmd.getValue()});
         csPin.on();
     }
 
     public void writeReg(ADS1263_REG reg, byte data) {
         csPin.off();
         rpi.delayMs(1);
-        rpi.spiWriteBytes(new byte[]{(byte) (ADS1263_CMD.CMD_WREG.ordinal() | reg.ordinal()), 0x00, data});
+        rpi.spiWriteBytes(new byte[]{(byte) (ADS1263_CMD.CMD_WREG.getValue() | reg.getValue()), 0x00, data});
         csPin.on();
     }
 
 
-    static public byte readReg(ADS1263_REG reg) {
-        int regCmd;
+    static public byte readData(ADS1263_REG reg) {
         csPin.off();
-        regCmd = ADS1263_CMD.CMD_RREG.ordinal() | reg.ordinal();
-        rpi.spiWriteBytes(new byte[]{(byte) regCmd , 0x00});
+        rpi.spiWriteBytes(new byte[]{(byte) (ADS1263_CMD.CMD_RREG.getValue() | reg.getValue()) , 0x00});
         byte[] resp = rpi.spiReadBytes(1);
         csPin.on();
         return resp[0];
@@ -77,9 +75,8 @@ public class ADS1263 {
     }
 
     public int readChipID() {
-        byte id = readReg(ADS1263_REG.REG_ID);
-//        out.println("reg_id = " + id);
-        return (id >> 5) & 0x07;
+        byte id = readData(ADS1263_REG.REG_ID);
+        return (id >> 5);
     }
 
     public void configADC1(ADS1263_GAIN gain, ADS1263_DRATE drate, ADS1263_DELAY delay) {
@@ -87,30 +84,30 @@ public class ADS1263 {
         byte mode2 = (byte) ((gain.ordinal() << 4) | drate.ordinal());
         writeReg(ADS1263_REG.REG_MODE2, mode2);
         rpi.delayMs(1);
-        assert readReg(ADS1263_REG.REG_MODE2) == mode2;
+        assert readData(ADS1263_REG.REG_MODE2) == mode2;
 
         byte refmux = 0x24;
         writeReg(ADS1263_REG.REG_REFMUX, refmux);
         rpi.delayMs(1);
-        assert readReg(ADS1263_REG.REG_REFMUX) == refmux;
+        assert readData(ADS1263_REG.REG_REFMUX) == refmux;
 
         byte mode0 = (byte) delay.ordinal();
         writeReg(ADS1263_REG.REG_MODE0, mode0);
         rpi.delayMs(1);
-        assert readReg(ADS1263_REG.REG_MODE0) == mode0;
+        assert readData(ADS1263_REG.REG_MODE0) == mode0;
 
         byte mode1 = (byte) 0x84;
         writeReg(ADS1263_REG.REG_MODE1, mode1);
         rpi.delayMs(1);
-        assert readReg(ADS1263_REG.REG_MODE1) == mode1;
+        assert readData(ADS1263_REG.REG_MODE1) == mode1;
         csPin.on();
     }
 
     public void initADC1(ADS1263_DRATE rate) {
         rpi.spiDeviceInit();
+        reset();
         int chipID = readChipID();
-        if (chipID != 1)
-            throw new IllegalStateException("ID Read failed, ID = " + chipID);
+        if (chipID != 1) out.printf("ID Read failed, ID = %d\n",chipID);
         writeCmd(ADS1263_CMD.CMD_STOP1);
         configADC1(ADS1263_GAIN.ADS1263_GAIN_1, rate, ADS1263_DELAY.ADS1263_DELAY_35us);
         writeCmd(ADS1263_CMD.CMD_START1);
@@ -124,9 +121,9 @@ public class ADS1263 {
         rpi.delayMs(10);
         do {
             writeCmd(ADS1263_CMD.CMD_RDATA1);
-//            rpi.delayMs(100);
+            rpi.delayMs(1);
             status = rpi.spiReadBytes(1);
-            out.printf("status = %d, ", status[0]);
+//            out.printf("status = %d, ", status[0]);
         } while ((status[0] & 0x40) == 0 && timeout++ < TIMEOUT);
 
         if (timeout >= TIMEOUT) {
