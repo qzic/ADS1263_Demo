@@ -16,6 +16,7 @@ public class ADS1263 {
 
     public ADS1263() {
         ADS1263_reset();
+        setMode(1);
     }
 
     /**
@@ -44,11 +45,12 @@ public class ADS1263 {
         csPin.on();
     }
 
-    public byte readReg(ADS1263_REG reg) {
+
+    static public byte readReg(ADS1263_REG reg) {
+        int regCmd;
         csPin.off();
-        rpi.delayMs(1);
-        rpi.spiWriteBytes(new byte[]{(byte) (ADS1263_CMD.CMD_RREG.ordinal() | reg.ordinal()), 0x00});
-        rpi.delayMs(2);
+        regCmd = ADS1263_CMD.CMD_RREG.ordinal() | reg.ordinal();
+        rpi.spiWriteBytes(new byte[]{(byte) regCmd , 0x00});
         byte[] resp = rpi.spiReadBytes(1);
         csPin.on();
         return resp[0];
@@ -152,7 +154,7 @@ public class ADS1263 {
         return readADC1Data();
     }
 
-    public void setMode(byte Mode) {
+    public void setMode(int Mode) {
         if (Mode == 0) {
             ScanMode = 0;
         } else {
