@@ -10,8 +10,7 @@ package ca.qzic.ads1263test_py;
  */
 public class ADS1263_Constants {
 
-    enum ADS12363_GAIN {
-        DUMMY,
+    enum ADS1263_GAIN {
         ADS1263_GAIN_1,
         ADS1263_GAIN_2,
         ADS1263_GAIN_4, 
@@ -39,6 +38,13 @@ public class ADS1263_Constants {
         ADS1263_19200SPS,
         ADS1263_38400SPS,
     };
+    
+    enum ADS1263_ADC2_DRATE {
+    ADS1263_ADC2_10SPS,
+    ADS1263_ADC2_100SPS,
+    ADS1263_ADC2_400SPS,
+    ADS1263_ADC2_800SPS;
+}
 
     enum ADS1263_DELAY {
         ADS1263_DELAY_0s,
@@ -53,13 +59,6 @@ public class ADS1263_Constants {
         ADS1263_DELAY_2d2ms,
         ADS1263_DELAY_4d4ms,
         ADS1263_DELAY_8d8ms,
-    };
-
-    enum ADS1263_ADC2_DRATE {
-        ADS1263_ADC2_10SPS,
-        ADS1263_ADC2_100SPS,
-        ADS1263_ADC2_400SPS,
-        ADS1263_ADC2_800SPS,
     };
 
     enum ADS1263_ADC2_GAIN {
@@ -110,32 +109,32 @@ public class ADS1263_Constants {
          * Register address, followed by reset the default values
          */
         REG_ID(0x00),
-        REG_POWER(0x11),
-        REG_INTERFACE(0x05),
-        REG_MODE0(0x00),
-        REG_MODE1(0x80),
-        REG_MODE2(0x04),
-        REG_INPMUX(0x01),
-        REG_OFCAL0(0x00),
-        REG_OFCAL1(0x00),
-        REG_OFCAL2(0x00),
-        REG_FSCAL0(0x00),
-        REG_FSCAL1(0x00),
-        REG_FSCAL2(0x40),
-        REG_IDACMUX(0xbb),
-        REG_IDACMAG(0x00),
-        REG_REFMUX(0x00),
-        REG_TDACP(0x00),
-        REG_TDACN(0x00),
-        REG_GPIOCON(0x00),
-        REG_GPIODIR(0x00),
-        REG_GPIODAT(0x00),
-        REG_ADC2CFG(0x00),
-        REG_ADC2MUX(0x01),
-        REG_ADC2OFC0(0x00),
-        REG_ADC2OFC1(0x00),
-        REG_ADC2FSC0(0x00),
-        REG_ADC2FSC1(0x00);
+        REG_POWER(0x01),
+        REG_INTERFACE(0x02),
+        REG_MODE0(0x03),
+        REG_MODE1(0x04),
+        REG_MODE2(0x05),
+        REG_INPMUX(0x06),
+        REG_OFCAL0(0x07),
+        REG_OFCAL1(0x08),
+        REG_OFCAL2(0x09),
+        REG_FSCAL0(0x0a),
+        REG_FSCAL1(0x0b),
+        REG_FSCAL2(0x0c),
+        REG_IDACMUX(0x0d),
+        REG_IDACMAG(0x0e),
+        REG_REFMUX(0x0f),
+        REG_TDACP(0x10),
+        REG_TDACN(0x11),
+        REG_GPIOCON(0x12),
+        REG_GPIODIR(0x13),
+        REG_GPIODAT(0x14),
+        REG_ADC2CFG(0x15),
+        REG_ADC2MUX(0x16),
+        REG_ADC2OFC0(0x17),
+        REG_ADC2OFC1(0x18),
+        REG_ADC2FSC0(0x19),
+        REG_ADC2FSC1(0x1a);
 
         private final int value;
 
@@ -150,7 +149,7 @@ public class ADS1263_Constants {
 
     enum ADS1263_CMD {
         CMD_RESET(0x06), // Reset the ADC, 0000 011x (06h or 07h)
-        CMD_START(0x08), // Start ADC1 conversions, 0000 100x (08h or 09h)
+        CMD_START1(0x08), // Start ADC1 conversions, 0000 100x (08h or 09h)
         CMD_STOP1(0x0A), // Stop ADC1 conversions, 0000 101x (0Ah or 0Bh)
         CMD_START2(0x0C), // Start ADC2 conversions, 0000 110x (0Ch or 0Dh)
         CMD_STOP2(0x0E), // Stop ADC2 conversions, 0000 111x (0Eh or 0Fh)
