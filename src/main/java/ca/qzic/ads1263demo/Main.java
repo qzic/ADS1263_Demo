@@ -1,27 +1,36 @@
+/*# /*****************************************************************************
+# * | File        :   Main.java
+# * | Author      :   Quentin Meek - original in python by Waveshare team
+# * | Function    :   Demo with Swing GUI
+# * | Info        :
+# *----------------
+# * | This version:   V1.0
+# * | Date        :   06/19/2025
+# * | Info        :   
+# ******************************************************************************
+*/
 package ca.qzic.ads1263demo;
 
-
+import static ca.qzic.ads1263demo.ADS1263.rpi;
 import ca.qzic.ads1263demo.ADS1263_Constants.ADS1263_DRATE;
 import java.awt.*;
-import java.util.prefs.*;
+import java.awt.event.*;
 import static java.lang.Thread.sleep;
 import javax.swing.*;
 import org.slf4j.LoggerFactory;
 
-
 /**
  *
- * @author Quentin
+ * @author Quentin - from original python demo by WaveShare team
  */
 public class Main extends javax.swing.JFrame {
+
     private static final long serialVersionUID = 1L;
     public static org.slf4j.Logger logger = LoggerFactory.getLogger(Main.class);
-    public static volatile boolean die = false, stop = false;
-    public static Preferences prefs;
-    public static Main netHost;
+    public static Main demo;
     static double REF = 5.08;
-
     static JPanel container = null;
+    static boolean running = true;
 
     /**
      * Creates new form AppFrame
@@ -29,7 +38,18 @@ public class Main extends javax.swing.JFrame {
     public Main() {
         initComponents();
         setLocation(800, 300);
+        setSize(600, 300);
         container = jPanel1;
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                cleanUpOnClose();
+            }
+        });
+    }
+
+    void cleanUpOnClose() {
+        running = false;
     }
 
     /**
@@ -442,16 +462,16 @@ public class Main extends javax.swing.JFrame {
      */
     public static void main(String args[]) throws InterruptedException {
         logger.debug("****************************************************");
-        logger.debug("**************** ADS1263 Demo **********************");
+        logger.debug("**************** ADS1263 ADC1 Demo **********************");
         logger.debug("****************************************************");
         /*
          * Create and display the form
          */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                netHost = new Main();
-                netHost.setLocationByPlatform(true);
-                netHost.setVisible(true);
+                demo = new Main();
+                demo.setLocationByPlatform(true);
+                demo.setVisible(true);
             }
         });
 
@@ -460,7 +480,7 @@ public class Main extends javax.swing.JFrame {
         adc.initADC1(ADS1263_DRATE.ADS1263_14400SPS);
         adc.setMode((byte) 0);  // 0 = single ended measurement, 1 = differential
         boolean once = false;
-        while (true) {
+        while (running) {
             for (int i = 0; i < 10; i++) {
                 long val = adc.getChannelValue(i);
                 if (once == false) {
@@ -477,8 +497,7 @@ public class Main extends javax.swing.JFrame {
             once = true;
             sleep(200);
         }
-
-        //==========================================================
+        rpi.spiDeviceClose();
     }
 
     public static Component findComponentByName(Container container, String name) {
@@ -494,26 +513,6 @@ public class Main extends javax.swing.JFrame {
             }
         }
         return null;
-    }
-
-    public static JTextField findTextFieldByName(Container parent, String name) {
-        JTextField found = null;
-        if (name != null) {
-            for (Component child : parent.getComponents()) {
-                if (child instanceof JTextField) {
-                    JTextField textField = (JTextField) child;
-                    if (name.equals(textField.getName())) {
-                        found = textField;
-                        break;
-                    }
-                }
-            }
-        }
-        return found;
-    }
-
-    public void MessageRecived(String s) {
-
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
