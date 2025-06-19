@@ -20,7 +20,6 @@ import javax.swing.*;
 import org.slf4j.LoggerFactory;
 
 public class Main extends javax.swing.JFrame {
-
     private static final long serialVersionUID = 1L;
     public static org.slf4j.Logger logger = LoggerFactory.getLogger(Main.class);
     public static Main demo;
