@@ -1,6 +1,7 @@
 # ADS1263_Demo
-This maven netbeans project demonstates the ADC1 features of the ADS1263 Raspberry Pi HAT
+This maven netbeans project demonstates the ADC1 features of the ADS1263 Raspberry Pi HAT.
 I have tested on a RPI 4B
+
 1. Import this project into Netbeans (I am using v26)
 2. Edit the pom file line 27 -  <platform>Your_RPi_IP_address</platform>
 3. Click Run  
