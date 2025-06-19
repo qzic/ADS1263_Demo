@@ -3,8 +3,12 @@ package ca.qzic.ads1263test_py;
 import ca.qzic.ads1263test_py.ADS1263_Constants.*;
 import ca.qzic.ads1263test_py.network.Networks.AppMsgHandler;
 import static ca.qzic.ads1263test_py.network.Common.AppCommon.*;
+import java.awt.*;
 import java.util.prefs.*;
 import static java.lang.System.out;
+import static java.lang.Thread.sleep;
+import java.util.*;
+import javax.swing.*;
 import org.slf4j.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +25,7 @@ import org.apache.logging.log4j.core.config.Configurator;
  * @author Quentin
  */
 public class Main extends javax.swing.JFrame {
+
     private static final long serialVersionUID = 1L;
     public static org.slf4j.Logger logger = LoggerFactory.getLogger(Main.class);
     public static volatile boolean die = false, stop = false;
@@ -29,6 +34,7 @@ public class Main extends javax.swing.JFrame {
     static AppMsgHandler myMsgHandler;
     static double REF = 5.08;
 
+    static JPanel container = null;
 
     /**
      * Creates new form AppFrame
@@ -36,6 +42,7 @@ public class Main extends javax.swing.JFrame {
     public Main() {
         initComponents();
         setLocation(800, 300);
+        container = jPanel1;
     }
 
     /**
@@ -95,6 +102,7 @@ public class Main extends javax.swing.JFrame {
         jLabel12.setText("CH 2");
 
         jTextField2.setText("jTextField1");
+        jTextField2.setName("2"); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -121,6 +129,7 @@ public class Main extends javax.swing.JFrame {
         jLabel3.setText("CH 3");
 
         jTextField3.setText("jTextField1");
+        jTextField3.setName("3"); // NOI18N
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -147,6 +156,7 @@ public class Main extends javax.swing.JFrame {
         jLabel4.setText("CH 4");
 
         jTextField4.setText("jTextField1");
+        jTextField4.setName("4"); // NOI18N
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -173,6 +183,7 @@ public class Main extends javax.swing.JFrame {
         jLabel5.setText("CH 5");
 
         jTextField5.setText("jTextField1");
+        jTextField5.setName("5"); // NOI18N
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -200,6 +211,7 @@ public class Main extends javax.swing.JFrame {
         jLabel7.setText("CH 7");
 
         jTextField7.setText("jTextField1");
+        jTextField7.setName("7"); // NOI18N
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -226,6 +238,7 @@ public class Main extends javax.swing.JFrame {
         jLabel8.setText("CH 8");
 
         jTextField8.setText("jTextField1");
+        jTextField8.setName("8"); // NOI18N
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -234,7 +247,7 @@ public class Main extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -252,6 +265,7 @@ public class Main extends javax.swing.JFrame {
         jLabel9.setText("CH 9");
 
         jTextField9.setText("jTextField1");
+        jTextField9.setName("9"); // NOI18N
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -260,7 +274,7 @@ public class Main extends javax.swing.JFrame {
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -278,6 +292,7 @@ public class Main extends javax.swing.JFrame {
         jLabel11.setText("CH 1");
 
         jTextField1.setText("jTextField1");
+        jTextField1.setName("1"); // NOI18N
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
@@ -304,6 +319,7 @@ public class Main extends javax.swing.JFrame {
         jLabel6.setText("CH 6");
 
         jTextField6.setText("jTextField1");
+        jTextField6.setName("6"); // NOI18N
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -330,6 +346,7 @@ public class Main extends javax.swing.JFrame {
         jLabel10.setText("CH 10");
 
         jTextField10.setText("jTextField1");
+        jTextField10.setName("10"); // NOI18N
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -338,7 +355,7 @@ public class Main extends javax.swing.JFrame {
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -358,33 +375,30 @@ public class Main extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
+                        .addGap(69, 69, 69)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(118, 118, 118)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(166, 166, 166)
-                                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(166, 166, 166)
-                                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(164, 164, 164)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(144, 144, 144)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(74, Short.MAX_VALUE))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(67, 67, 67)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(118, 118, 118)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(80, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -423,7 +437,7 @@ public class Main extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -439,31 +453,12 @@ public class Main extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws InterruptedException {
 //        prefs = Preferences.userNodeForPackage(Main.class);
 
         logger.debug("****************************************************");
-        logger.debug("**************** ADS1263 Test **********************");
+        logger.debug("**************** ADS1263 Demo **********************");
         logger.debug("****************************************************");
-
-        //------------------------------------------------------------------------------------------
-        // Start Blue Tooth Server and message handler
-//        myMsgHandler = new AppMsgHandler(uuidString);
-
-        //==========================================================
-        ADS1263 adc = new ADS1263();
-        adc.initADC1(ADS1263_DRATE.ADS1263_14400SPS);
-        adc.setMode((byte) 0);  // 0 = single ended measurement, 1 = differential
-        for (int i = 0; i < 10; i++) {
-            long val = adc.getChannelValue(i);
-            if((val>>31) == 1)
-                    out.printf("IN %d is -%lf   raw = %d\n", i , REF*2 - val/2147483648.0 * REF,val); 
-                else
-                    out.printf("IN %d is %f    raw = %d\n", i, val/2147483647.0 * REF,val);   
-        }
-        adc.exit();
-        
-        //==========================================================
 
         /*
          * Create and display the form
@@ -475,6 +470,65 @@ public class Main extends javax.swing.JFrame {
                 netHost.setVisible(true);
             }
         });
+
+        //------------------------------------------------------------------------------------------
+        // Start Blue Tooth Server and message handler
+//        myMsgHandler = new AppMsgHandler(uuidString);
+        //==========================================================
+        ADS1263 adc = new ADS1263();
+        adc.initADC1(ADS1263_DRATE.ADS1263_14400SPS);
+        adc.setMode((byte) 0);  // 0 = single ended measurement, 1 = differential
+        boolean once = false;
+        while (true) {
+            for (int i = 0; i < 10; i++) {
+                long val = adc.getChannelValue(i);
+                if (once == false) {
+                    String s;
+                    if ((val >> 31) == 1)   // if negative
+                        s = String.format("IN %d is -%lf   raw = %d\n", i, REF * 2 - val / 2147483648.0 * REF, val);
+                    else                    // positive
+                        s = String.format("IN %d is %f    raw = %d\n", i, val / 2147483647.0 * REF, val);
+                    logger.info("%s",s);
+                }
+                JTextField tf = (JTextField) findComponentByName(container, Integer.toString(i + 1));
+                tf.setText(String.format("%3.2f", val / 2147483647.0 * REF));
+            }
+            once = true;
+            sleep(200);
+        }
+
+        //==========================================================
+    }
+
+    public static Component findComponentByName(Container container, String name) {
+        for (Component comp : container.getComponents()) {
+            if (name.equals(comp.getName())) {
+                return comp;
+            }
+            if (comp instanceof Container) {
+                Component child = findComponentByName((Container) comp, name);
+                if (child != null) {
+                    return child;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static JTextField findTextFieldByName(Container parent, String name) {
+        JTextField found = null;
+        if (name != null) {
+            for (Component child : parent.getComponents()) {
+                if (child instanceof JTextField) {
+                    JTextField textField = (JTextField) child;
+                    if (name.equals(textField.getName())) {
+                        found = textField;
+                        break;
+                    }
+                }
+            }
+        }
+        return found;
     }
 
     public void MessageRecived(String s) {
