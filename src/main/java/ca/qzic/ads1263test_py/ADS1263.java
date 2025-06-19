@@ -5,53 +5,48 @@
 package ca.qzic.ads1263test_py;
 
 import ca.qzic.ads1263test_py.ADS1263_Constants.*;
+import static ca.qzic.ads1263test_py.Main.logger;
 import static ca.qzic.ads1263test_py.RaspberryPiConfig.*;
 import static java.lang.System.out;
 
 public class ADS1263 {
 
-    private int ScanMode = 0;
-
+    private int ScanMode = 1;
     public static RaspberryPiConfig rpi = new RaspberryPiConfig();
 
     public ADS1263() {
-        reset();
-        setMode(0);
     }
 
     /**
      * Resets via RST pin toggles
      */
-    static public void reset() {
+    public void reset() {
         rstPin.on();
-        rpi.delayMs(300);
+        rpi.delayMs(200);
         rstPin.off();
-        rpi.delayMs(300);
+        rpi.delayMs(200);
         rstPin.on();
-        rpi.delayMs(300);
+        rpi.delayMs(200);
     }
 
     public void writeCmd(ADS1263_CMD cmd) {
         csPin.off();
-        rpi.delayMs(1);
         rpi.spiWriteBytes(new byte[]{(byte) cmd.getValue()});
         csPin.on();
     }
 
     public void writeReg(ADS1263_REG reg, byte data) {
         csPin.off();
-        rpi.delayMs(1);
         rpi.spiWriteBytes(new byte[]{(byte) (ADS1263_CMD.CMD_WREG.getValue() | reg.getValue()), 0x00, data});
         csPin.on();
     }
 
-
     static public byte readData(ADS1263_REG reg) {
         csPin.off();
-        rpi.spiWriteBytes(new byte[]{(byte) (ADS1263_CMD.CMD_RREG.getValue() | reg.getValue()) , 0x00});
-        byte[] resp = rpi.spiReadBytes(1);
+        rpi.spiWriteBytes(new byte[]{(byte) (ADS1263_CMD.CMD_RREG.getValue() | reg.getValue()), 0x00});
+        byte[] data = rpi.spiReadBytes(1);
         csPin.on();
-        return resp[0];
+        return data[0];
     }
 
     public byte checksum(int val, byte b) {
@@ -60,103 +55,124 @@ public class ADS1263 {
             sum += (val & mask);
             val >>= 8;
         }
-        sum += 0x9B;
-        return (byte) ((sum ^ b) & 0xff);
+        sum += 0x9b;
+        return (byte) ((sum & 0xff) ^ b);
     }
 
     public void waitDRDY() {
-        long count = 0;
+        int i = 0;
         while (drdyPin.getValue() != false) {
-            if (++count > 400_000) {
+            if (++i > 400_000) {
                 System.err.println("waitDRDY(): Time Out ...");
                 break;
             }
         }
     }
 
-    public int readChipID() {
+    public int readChipID() {   // should be 35
         byte id = readData(ADS1263_REG.REG_ID);
         return (id >> 5);
     }
 
+    public void setMode(int Mode) {
+        this.ScanMode = Mode;
+    }
+
     public void configADC1(ADS1263_GAIN gain, ADS1263_DRATE drate, ADS1263_DELAY delay) {
+        byte retVal;
         csPin.off();
-        byte mode2 = (byte) ((gain.ordinal() << 4) | drate.ordinal());
+        byte mode2 = (byte) 0x80;
+        mode2 |= ((byte) ((gain.ordinal() << 4) | drate.ordinal()));
         writeReg(ADS1263_REG.REG_MODE2, mode2);
         rpi.delayMs(1);
-        assert readData(ADS1263_REG.REG_MODE2) == mode2;
+        retVal = readData(ADS1263_REG.REG_MODE2);
+        if (retVal == mode2)
+            logger.debug("REG_MODE2 success");
+        else
+            logger.error("REG_MODE2 unsuccess " + retVal);
 
         byte refmux = 0x24;
         writeReg(ADS1263_REG.REG_REFMUX, refmux);
         rpi.delayMs(1);
-        assert readData(ADS1263_REG.REG_REFMUX) == refmux;
+        retVal = readData(ADS1263_REG.REG_REFMUX);
+        if (retVal == refmux)
+            logger.debug("REG_REFMUX success");
+        else
+            logger.error("REG_REFMUX unsuccess " + retVal);
 
         byte mode0 = (byte) delay.ordinal();
         writeReg(ADS1263_REG.REG_MODE0, mode0);
-        rpi.delayMs(1);
-        assert readData(ADS1263_REG.REG_MODE0) == mode0;
+        retVal = readData(ADS1263_REG.REG_MODE0);
+        if (retVal == mode0)
+            logger.debug("REG_MODE0 success");
+        else
+            logger.error("REG_MODE0 unsuccess " + retVal);
 
         byte mode1 = (byte) 0x84;
         writeReg(ADS1263_REG.REG_MODE1, mode1);
         rpi.delayMs(1);
-        assert readData(ADS1263_REG.REG_MODE1) == mode1;
+        retVal = readData(ADS1263_REG.REG_MODE1);
+        if (retVal == mode1)
+            logger.debug("REG_MODE1 success");
+        else
+            logger.error("REG_MODE1 unsuccess " + retVal);
         csPin.on();
+    }
+
+    public void setChannel(int ch) {
+        byte ipmux = (byte) ((ch << 4) | 0x0a);
+        writeReg(ADS1263_REG.REG_INPMUX, ipmux);
+        if ((readData(ADS1263_REG.REG_INPMUX) == ipmux)) {
+            logger.debug("setChannel(ch) success");
+        } else {
+            logger.error("setChannel(ch) failed");
+        }
     }
 
     public void initADC1(ADS1263_DRATE rate) {
         rpi.spiDeviceInit();
         reset();
         int chipID = readChipID();
-        if (chipID != 1) out.printf("ID Read failed, ID = %d\n",chipID);
+        if (chipID != 1) out.printf("ID Read failed, ID = %d\n", chipID);
         writeCmd(ADS1263_CMD.CMD_STOP1);
         configADC1(ADS1263_GAIN.ADS1263_GAIN_1, rate, ADS1263_DELAY.ADS1263_DELAY_35us);
         writeCmd(ADS1263_CMD.CMD_START1);
     }
 
-    public long readADC1Data() {
-        final int TIMEOUT = 50;
+    public int readADC1Data() {
+        final int TIMEOUT = 2;
         int timeout = 0;
         byte[] status;
         csPin.off();
-        rpi.delayMs(10);
         do {
-            writeCmd(ADS1263_CMD.CMD_RDATA1);
-            rpi.delayMs(1);
+            rpi.spiWriteBytes(new byte[]{(byte) ADS1263_CMD.CMD_RDATA1.getValue()});
             status = rpi.spiReadBytes(1);
-//            out.printf("status = %d, ", status[0]);
         } while ((status[0] & 0x40) == 0 && timeout++ < TIMEOUT);
 
         if (timeout >= TIMEOUT) {
-            out.println("readADC1Data; timed out");
+            logger.error("readADC1Data; timed out");
         }
         byte[] buf = rpi.spiReadBytes(5);  // 4 data bytes plus crc
         csPin.on();
-        int raw = ((buf[0] & 0xff) << 24) | ((buf[1] & 0xff) << 16)
+        int read = ((buf[0] & 0xff) << 24) | ((buf[1] & 0xff) << 16)
             | ((buf[2] & 0xff) << 8) | (buf[3] & 0xff);
-        if (checksum(raw, buf[4]) != 0)
-            System.err.println("ADC1 data read error!  crc = " + buf[4]);
-        return raw;
+        if (checksum(read, buf[4]) != 0)
+            logger.error("ADC1 data read error!  crc = " + buf[4]);
+        return read;
     }
 
-    public long getChannel(int ch) {
-        ScanMode = 0; // KLUDGE because somehow this gets set to 1 ????
-        if (ScanMode == 0) {
-            // single-ended; channels 0–10
-            writeReg(ADS1263_REG.REG_INPMUX, (byte) ((ch << 4) | 0x0a));
-        } else {
-            // differential; 0–4
-            writeReg(ADS1263_REG.REG_INPMUX, (byte) (((ch * 2) << 4) | ((ch * 2) + 1)));
-        }
+    public int getChannelValue(int ch) {
+        setChannel(ch);
         waitDRDY();
         return readADC1Data();
     }
 
-    public void setMode(int Mode) {
-        if (Mode == 0) {
-            ScanMode = 0;
-        } else {
-            ScanMode = 1;
+    public int[] getAll(int[] list) {
+        int[] ADC_Value = new int[list.length];
+        for (int i = 0; i < list.length; i++) {
+            ADC_Value[i] = getChannelValue(i);
         }
+        return ADC_Value;
     }
 
     public void exit() {

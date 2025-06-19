@@ -90,7 +90,7 @@ public class AppMsgHandler implements MsgHandlerIF {
             }
             switch (btMsgCode) {
                 case BT_CONNECTED:
-                    logger.info("BT connected");
+                    logger.debug("BT connected");
                     // Send IP address to comtroller
                     if (!sentIP) {
                         String s = findMyIP() + "\n";
@@ -99,7 +99,7 @@ public class AppMsgHandler implements MsgHandlerIF {
                     }
                     break;
                 case BT_DISCONNECTED:
-                    logger.info("BT disconnected");
+                    logger.debug("BT disconnected");
                     break;
                 default:
             }
