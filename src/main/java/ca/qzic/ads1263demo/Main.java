@@ -1,37 +1,24 @@
-package ca.qzic.ads1263test_py;
+package ca.qzic.ads1263demo;
 
-import ca.qzic.ads1263test_py.ADS1263_Constants.*;
-import ca.qzic.ads1263test_py.network.Networks.AppMsgHandler;
-import static ca.qzic.ads1263test_py.network.Common.AppCommon.*;
+
+import ca.qzic.ads1263demo.ADS1263_Constants.ADS1263_DRATE;
 import java.awt.*;
 import java.util.prefs.*;
-import static java.lang.System.out;
 import static java.lang.Thread.sleep;
-import java.util.*;
 import javax.swing.*;
-import org.slf4j.*;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.logging.log4j.core.config.Configurator;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt
- * to change this license Click
- * nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this
- * template
- */
+
 /**
  *
  * @author Quentin
  */
 public class Main extends javax.swing.JFrame {
-
     private static final long serialVersionUID = 1L;
     public static org.slf4j.Logger logger = LoggerFactory.getLogger(Main.class);
     public static volatile boolean die = false, stop = false;
     public static Preferences prefs;
     public static Main netHost;
-    static AppMsgHandler myMsgHandler;
     static double REF = 5.08;
 
     static JPanel container = null;
@@ -454,12 +441,9 @@ public class Main extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) throws InterruptedException {
-//        prefs = Preferences.userNodeForPackage(Main.class);
-
         logger.debug("****************************************************");
         logger.debug("**************** ADS1263 Demo **********************");
         logger.debug("****************************************************");
-
         /*
          * Create and display the form
          */
@@ -471,9 +455,6 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        //------------------------------------------------------------------------------------------
-        // Start Blue Tooth Server and message handler
-//        myMsgHandler = new AppMsgHandler(uuidString);
         //==========================================================
         ADS1263 adc = new ADS1263();
         adc.initADC1(ADS1263_DRATE.ADS1263_14400SPS);
@@ -485,10 +466,10 @@ public class Main extends javax.swing.JFrame {
                 if (once == false) {
                     String s;
                     if ((val >> 31) == 1)   // if negative
-                        s = String.format("IN %d is -%lf   raw = %d\n", i, REF * 2 - val / 2147483648.0 * REF, val);
+                        s = String.format("\tIN %d is -%lf   raw = %d", i, REF * 2 - val / 2147483648.0 * REF, val);
                     else                    // positive
-                        s = String.format("IN %d is %f    raw = %d\n", i, val / 2147483647.0 * REF, val);
-                    logger.info("%s",s);
+                        s = String.format("\tIN %d is %f    raw = %d", i, val / 2147483647.0 * REF, val);
+                    logger.info(s);
                 }
                 JTextField tf = (JTextField) findComponentByName(container, Integer.toString(i + 1));
                 tf.setText(String.format("%3.2f", val / 2147483647.0 * REF));

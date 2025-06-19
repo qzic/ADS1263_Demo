@@ -1,10 +1,10 @@
-package ca.qzic.ads1263test_py;
+package ca.qzic.ads1263demo;
 
 /**
  *
  * @author Quentin
  */
-import static ca.qzic.ads1263test_py.Main.logger;
+import static ca.qzic.ads1263demo.Main.logger;
 import com.diozero.api.*;
 import static com.diozero.api.GpioPullUpDown.PULL_UP;
 import static com.diozero.api.SpiConstants.DEFAULT_SPI_CLOCK_MODE;

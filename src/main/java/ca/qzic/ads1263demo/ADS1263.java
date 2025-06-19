@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package ca.qzic.ads1263test_py;
+package ca.qzic.ads1263demo;
 
-import ca.qzic.ads1263test_py.ADS1263_Constants.*;
-import static ca.qzic.ads1263test_py.Main.logger;
-import static ca.qzic.ads1263test_py.RaspberryPiConfig.*;
+import ca.qzic.ads1263demo.ADS1263_Constants.*;
+import static ca.qzic.ads1263demo.Main.logger;
+import static ca.qzic.ads1263demo.RaspberryPiConfig.*;
 import static java.lang.System.out;
 
 public class ADS1263 {

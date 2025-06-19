@@ -2,10 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>ca.qzic</groupId>
-    <artifactId>ads1263test_py</artifactId>
+    <artifactId>ads1263demo</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
-    <name>ads1263test_py</name>
+    <name>ads1263demo</name>
     
     <parent>
         <groupId>ca.qzic</groupId>
