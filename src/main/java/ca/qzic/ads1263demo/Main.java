@@ -19,10 +19,6 @@ import static java.lang.Thread.sleep;
 import javax.swing.*;
 import org.slf4j.LoggerFactory;
 
-/**
- *
- * @author Quentin - from original python demo by WaveShare team
- */
 public class Main extends javax.swing.JFrame {
 
     private static final long serialVersionUID = 1L;
