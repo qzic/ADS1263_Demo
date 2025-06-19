@@ -6,17 +6,165 @@
     <version>1.0</version>
     <packaging>jar</packaging>
     <name>ads1263demo</name>
-    
-    <parent>
-        <groupId>ca.qzic</groupId>
-        <artifactId>Raspberry-Pom</artifactId>
-        <version>1.0</version>   
-    </parent>
-    
+   
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>17</maven.compiler.release>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <slf4j-api.version>1.7.36</slf4j-api.version>
+        <log4j2.version>2.24.3</log4j2.version>
+        <log4j-slf4j.version>${log4j2.version}</log4j-slf4j.version>
+        <log4j.version>${log4j2.version}</log4j.version>
+        <log4j-api.version>${log4j2.version}</log4j-api.version>
+        <target.platform.name>raspberry</target.platform.name>
+        <!-- Use jvmargs to pass args like -Dpi4j.library.path=<Path to the libpi4j-pigpio.so library> -->
+        <jvmargs.debug></jvmargs.debug>
+        <jvmargs.run></jvmargs.run>
+        <!-- Use jvmargs to pass command line args to application-->
+        <application.args></application.args>
+        <!-- IP address of raspberry -->
         <platform>${Rpi-3-1}</platform>
         <exec.mainClass>${project.groupId}.${project.artifactId}.Main</exec.mainClass>
     </properties>
-        
+    
+    <dependencies>       
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j-slf4j.version}</version>
+            <!--<scope>compile</scope>-->
+        </dependency> 
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j-slf4j.version}</version>
+            <!--<scope>compile</scope>-->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.diozero</groupId>
+            <artifactId>diozero-core</artifactId>
+            <version>1.4.1</version>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.7.1</version>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>${exec.mainClass}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>setMavenJarPluginOutputDir</id>
+                        <phase>compile</phase>
+                        <configuration>
+                            <exportAntProperties>true</exportAntProperties>
+                            <target>
+                                <property name="finalJarDir" value="${project.build.directory}"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>build</id>
+                        <phase>install</phase>
+                        <configuration>
+                            <target>
+                                <property name="local.dist.dir" value="${project.build.directory}" />        
+                                <property name="remote.runtime.encoding" value="UTF-8" />
+                                <property name="dist.jar.name" value="${project.build.finalName}" />        
+                                <ant antfile="antrun/build.xml" target="build-remote" />
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>exec</id>
+                        <configuration>
+                            <target>
+                                <property name="application.args" value="${application.args}"/>    
+                                <property name="target.platform.host" value="${platform}" />
+                                <property name="remote.run.jvmargs" value="${jvmargs.run}" />
+                                <property name="local.dist.dir" value="${project.build.directory}" />        
+                                <property name="remote.runtime.encoding" value="UTF-8" />
+                                <property name="dist.jar.name" value="${project.build.finalName}" />    
+                                <ant antfile="antrun/build.xml" target="run-remote" /> 
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>debug</id>
+                        <configuration>
+                            <target>
+                                <property name="application.args" value="${application.args}"/>    
+                                <property name="target.platform.host" value="${platform}" />
+                                <property name="remote.debug.jvmargs" value="${jvmargs.debug}" />
+                                <property name="local.dist.dir" value="${project.build.directory}" />        
+                                <property name="remote.runtime.encoding" value="UTF-8" />
+                                <property name="dist.jar.name" value="${project.build.finalName}" />  
+                                <ant antfile="antrun/build.xml" target="debug-remote" />
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.jcraft</groupId>
+                        <artifactId>jsch</artifactId>
+                        <version>0.1.55</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.ant</groupId>
+                        <artifactId>ant-jsch</artifactId>
+                        <version>1.10.8</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
 </project>
