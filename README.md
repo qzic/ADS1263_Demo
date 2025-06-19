@@ -1,5 +1,8 @@
 # ADS1263_Demo
 This maven netbeans project demonstates the ADC1 features of the ADS1263 Raspberry Pi HAT.
+
+https://www.waveshare.com/wiki/High-Precision_AD_HAT#Datasheet
+
 I have tested on a RPI 4B
 
 1. Import this project into Netbeans (I am using v26)
