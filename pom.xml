@@ -24,7 +24,7 @@
         <!-- Use jvmargs to pass command line args to application-->
         <application.args></application.args>
         <!-- IP address of raspberry -->
-        <platform>192.168.1.226</platform>
+        <platform>${Rpi-3-1}</platform>
         <exec.mainClass>${project.groupId}.${project.artifactId}.Main</exec.mainClass>
     </properties>
     
